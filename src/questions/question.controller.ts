@@ -28,10 +28,6 @@ export class QuestionsController {
   @HttpCode(HttpStatus.OK)
   async getAllQuestions(@Req() req, @Res() res) {
     const questions = await this.questionsService.findAll();
-    // const filteredQuestions = questions.filter(
-    //   (question) => question.userId === user.id,
-    // );
-
     return res.send(questions);
   }
   @UseGuards(JWTGuard)

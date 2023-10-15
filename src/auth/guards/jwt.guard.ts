@@ -12,7 +12,6 @@ export class JWTGuard implements CanActivate {
     constructor(private authService: AuthService) {}
     async canActivate(
         context: ExecutionContext,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
     ): boolean | Promise<boolean> | Observable<boolean> {
         const request = context.switchToHttp().getRequest();
