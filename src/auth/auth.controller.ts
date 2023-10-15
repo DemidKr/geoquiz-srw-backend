@@ -34,7 +34,7 @@ export class AuthController {
     );
 
     res.statusCode = HttpStatus.OK;
-    return res.send({ ...access, ...refresh, username: user.username });
+    return res.send({ ...access, ...refresh, username: user.username, role: user.role });
   }
 
   @UseGuards(RegistrationGuard)
@@ -51,7 +51,7 @@ export class AuthController {
     );
 
     res.statusCode = HttpStatus.CREATED;
-    return res.send({ ...access, ...refresh, username: user.username });
+    return res.send({ ...access, ...refresh, username: user.username, role: user.role });
   }
 
   @UseGuards(RefreshJWTGuard)
