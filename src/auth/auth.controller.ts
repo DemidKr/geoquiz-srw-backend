@@ -1,8 +1,8 @@
 import {
   Body,
-  Controller,
+  Controller, Get, HttpCode,
   HttpStatus,
-  Post,
+  Post, Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
@@ -15,6 +15,7 @@ import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { LoginGuard } from './guards/login.guard';
 import { RegistrationGuard } from './guards/registration.guard';
 import { RefreshJWTGuard } from './guards/refresh-jwt.guard';
+import {JWTGuard} from "./guards/jwt.guard";
 
 @Controller('auth')
 export class AuthController {
@@ -83,5 +84,15 @@ export class AuthController {
         refresh_token: refreshTokenDto.refresh_token,
       });
     }
+  }
+  @UseGuards(JWTGuard)
+  @Get('verify')
+  @HttpCode(HttpStatus.OK)
+  async getAllUserQuestions(@Req() req, @Res() res) {
+    const token = req.token;
+
+    const user = await this.authService.getUserByTokenData(token);
+
+    return res.send({username: user.username, role: user.role});
   }
 }
