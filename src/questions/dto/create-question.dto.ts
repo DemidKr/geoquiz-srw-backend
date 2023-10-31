@@ -2,13 +2,12 @@ import { IsNotEmpty } from 'class-validator';
 
 export class CreateQuestionDto {
   @IsNotEmpty()
-  readonly name: string;
+  readonly title: string;
 
   @IsNotEmpty()
-  readonly coordinates: number[];
+  readonly description: string;
 
-  @IsNotEmpty()
-  readonly date: Date;
+  readonly imageUrl: string;
 
   @IsNotEmpty()
   readonly userId: number;

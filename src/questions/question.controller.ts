@@ -30,6 +30,7 @@ export class QuestionsController {
     const questions = await this.questionsService.findAll();
     return res.send(questions);
   }
+
   @UseGuards(JWTGuard)
   @Get('/user')
   @HttpCode(HttpStatus.OK)
