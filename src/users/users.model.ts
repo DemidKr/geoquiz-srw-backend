@@ -17,5 +17,5 @@ export class User extends Model<User> {
   password: string;
 
   @Column({ type: DataType.INTEGER, allowNull: false })
-  role: number;
+  roleId: number;
 }

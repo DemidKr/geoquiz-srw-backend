@@ -35,7 +35,7 @@ export class AuthController {
     );
 
     res.statusCode = HttpStatus.OK;
-    return res.send({ ...access, ...refresh, username: user.username, role: user.role });
+    return res.send({ ...access, ...refresh, username: user.username, roleId: user.roleId });
   }
 
   @UseGuards(RegistrationGuard)
@@ -52,7 +52,7 @@ export class AuthController {
     );
 
     res.statusCode = HttpStatus.CREATED;
-    return res.send({ ...access, ...refresh, username: user.username, role: user.role });
+    return res.send({ ...access, ...refresh, username: user.username, roleId: user.roleId });
   }
 
   @UseGuards(RefreshJWTGuard)
@@ -93,6 +93,6 @@ export class AuthController {
 
     const user = await this.authService.getUserByTokenData(token);
 
-    return res.send({username: user.username, role: user.role});
+    return res.send({username: user.username, roleId: user.roleId});
   }
 }

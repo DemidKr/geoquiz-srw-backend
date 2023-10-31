@@ -29,7 +29,7 @@ export class UsersService {
             return null;
         }
 
-        const createdUser = await this.userRepository.create(createUserDto);
+        const createdUser = await this.userRepository.create({...createUserDto, roleId: 1});
         return createdUser.save();
     }
 
