@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Question } from './question.model';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateQuestionDto } from './dto/create-question.dto';
+import {UpdateQuestionDto} from "./dto/update-question.dto";
 
 @Injectable()
 export class QuestionsService {
@@ -24,6 +25,15 @@ export class QuestionsService {
       createQuestionDto,
     );
     return createdQuestion.save();
+  }
+
+  async update(id: number, updateQuestionDto: UpdateQuestionDto): Promise<Question> {
+    const question = await this.questionRepository.findOne({
+      where: { id },
+    });
+
+    await question.update({...updateQuestionDto},);
+    return question.save();
   }
 
   async delete(id: number): Promise<void> {

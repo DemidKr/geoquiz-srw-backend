@@ -7,7 +7,7 @@ import {
   HttpStatus,
   Param,
   Patch,
-  Post,
+  Post, Put,
   Req,
   Res,
   UseGuards,
@@ -16,6 +16,7 @@ import { QuestionsService } from './question.service';
 import { AuthService } from '../auth/auth.service';
 import { JWTGuard } from '../auth/guards/jwt.guard';
 import { CreateQuestionDto } from './dto/create-question.dto';
+import {UpdateQuestionDto} from "./dto/update-question.dto";
 
 @Controller('question')
 export class QuestionsController {
@@ -65,6 +66,20 @@ export class QuestionsController {
       ...createQuestionDto,
       userId: user.id,
     });
+  }
+
+  @UseGuards(JWTGuard)
+  @Put(':id')
+  @HttpCode(HttpStatus.OK)
+  async updateQuestion(
+      @Body() updateQuestionDto: UpdateQuestionDto,
+      @Param('id') id: number,
+      @Req() req,
+  ) {
+    return await this.questionsService.update(
+        id,
+        {...updateQuestionDto}
+    );
   }
 
   @UseGuards(JWTGuard)
