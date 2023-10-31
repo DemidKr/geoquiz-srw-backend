@@ -20,10 +20,10 @@ export class RolesService {
     }
 
     async create(createRoleDto: CreateRoleDto): Promise<Role> {
-        const createdQuestion = await this.roleRepository.create(
+        const createdRole = await this.roleRepository.create(
             createRoleDto,
         );
-        return createdQuestion.save();
+        return createdRole.save();
     }
 
     async delete(id: number): Promise<void> {
