@@ -10,6 +10,7 @@ export class CreateQuestionDto {
   @IsNotEmpty()
   readonly date: Date;
 
+  @IsNotEmpty()
   readonly userId: number;
 }
 
