@@ -10,6 +10,8 @@ import {Role} from "./roles/roles.model";
 import {RoleModule} from "./roles/roles.module";
 import {CoordinatesModule} from "./coordinates/coordinates.module";
 import {Coordinates} from "./coordinates/coordinates.model";
+import {Stars} from "./stars/stars.model";
+import {StarsModule} from "./stars/stars.module";
 
 @Module({
   imports: [
@@ -23,14 +25,15 @@ import {Coordinates} from "./coordinates/coordinates.model";
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [User, Question, Role, Coordinates],
+      models: [User, Question, Role, Coordinates, Stars],
       autoLoadModels: true,
     }),
     UsersModule,
     AuthModule,
     QuestionsModule,
-      RoleModule,
-      CoordinatesModule,
+    RoleModule,
+    CoordinatesModule,
+    StarsModule,
   ],
 })
 export class AppModule {}

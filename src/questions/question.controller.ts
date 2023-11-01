@@ -78,7 +78,7 @@ export class QuestionsController {
   ) {
     return await this.questionsService.update(
         id,
-        {...updateQuestionDto}
+        updateQuestionDto
     );
   }
 

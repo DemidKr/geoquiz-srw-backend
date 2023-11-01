@@ -32,7 +32,7 @@ export class QuestionsService {
       where: { id },
     });
 
-    await question.update({...updateQuestionDto},);
+    await question.update(updateQuestionDto);
     return question.save();
   }
 
