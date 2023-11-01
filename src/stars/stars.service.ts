@@ -14,8 +14,10 @@ export class StarsService {
         return await this.starsRepository.findAll();
     }
 
-    async findQuestionAverageStars(questionId: number): Promise<Stars[]> {
-        return await this.starsRepository.findAll({where: {questionId}});
+    async findQuestionAverageStars(questionId: number): Promise<number> {
+        const stars = await this.starsRepository.findAll({where: {questionId}})
+
+        return stars.reduce((accumulator, currentStar) => accumulator + currentStar.number, 0);
     }
 
     async findOne(id: number): Promise<Stars> {
