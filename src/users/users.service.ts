@@ -3,6 +3,8 @@ import { User } from './users.model';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateUserDto } from '../auth/dto/create-user.dto';
 import { LoginUserDto } from '../auth/dto/login-user.dto';
+import {Coordinates} from "../coordinates/coordinates.model";
+import {Role} from "../roles/roles.model";
 
 @Injectable()
 export class UsersService {
@@ -11,13 +13,14 @@ export class UsersService {
     async login(loginUserDto: LoginUserDto): Promise<User | null> {
         const user = await this.userRepository.findOne({
             where: { username: loginUserDto.username },
+            include: [{ model: Role }]
         });
 
         if (!user) {
             return null;
         }
 
-        return user as User;
+        return user;
     }
 
     async registration(createUserDto: CreateUserDto): Promise<User | null> {
@@ -41,6 +44,7 @@ export class UsersService {
     async findOne(username: string): Promise<User> {
         return await this.userRepository.findOne({
             where: { username },
+            include: [{ model: Role }]
         });
     }
 }

@@ -16,12 +16,14 @@ import { LoginGuard } from './guards/login.guard';
 import { RegistrationGuard } from './guards/registration.guard';
 import { RefreshJWTGuard } from './guards/refresh-jwt.guard';
 import {JWTGuard} from "./guards/jwt.guard";
+import {RolesService} from "../roles/roles.service";
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private usersService: UsersService,
     private authService: AuthService,
+    private roleService: RolesService,
   ) {}
 
   @UseGuards(LoginGuard)
@@ -35,7 +37,7 @@ export class AuthController {
     );
 
     res.statusCode = HttpStatus.OK;
-    return res.send({ ...access, ...refresh, username: user.username, roleId: user.roleId });
+    return res.send({ ...access, ...refresh, username: user.username, role: user.role });
   }
 
   @UseGuards(RegistrationGuard)
@@ -46,13 +48,16 @@ export class AuthController {
   ) {
     const user = await this.usersService.registration(createUserDto);
 
+
     const access = await this.authService.generateAccessToken(user);
     const refresh = await this.authService.generateRefreshToken(
       user.id as number,
     );
 
+    const role = await this.roleService.findOne(user.roleId)
+
     res.statusCode = HttpStatus.CREATED;
-    return res.send({ ...access, ...refresh, username: user.username, roleId: user.roleId });
+    return res.send({ ...access, ...refresh, username: user.username, role });
   }
 
   @UseGuards(RefreshJWTGuard)
@@ -88,11 +93,11 @@ export class AuthController {
   @UseGuards(JWTGuard)
   @Get('verify')
   @HttpCode(HttpStatus.OK)
-  async getAllUserQuestions(@Req() req, @Res() res) {
+  async verify(@Req() req, @Res() res) {
     const token = req.token;
 
     const user = await this.authService.getUserByTokenData(token);
 
-    return res.send({username: user.username, roleId: user.roleId});
+    return res.send({username: user.username, role: user.role});
   }
 }
