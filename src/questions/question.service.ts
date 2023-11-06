@@ -4,6 +4,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { CreateQuestionDto } from './dto/create-question.dto';
 import {UpdateQuestionDto} from "./dto/update-question.dto";
 import {User} from "../users/users.model";
+import {Coordinates} from "../coordinates/coordinates.model";
 
 @Injectable()
 export class QuestionsService {
@@ -12,10 +13,15 @@ export class QuestionsService {
   ) {}
 
   async findAll(): Promise<Question[]> {
-    const question =  await this.questionRepository.findAll({include: [{
-        model: User,
-        attributes: ['username'],   // attributes here are nested under "Like"
-      }],
+    const question =  await this.questionRepository.findAll({include: [
+        {
+          model: User,
+          attributes: ['username'],   // attributes here are nested under "Like"
+        },
+        {
+          model: Coordinates,
+        },
+      ],
     });
 
     return question
@@ -24,10 +30,15 @@ export class QuestionsService {
   async findOne(id: number): Promise<Question> {
     return await this.questionRepository.findOne({
       where: { id },
-      include: [{
-        model: User,
-        attributes: ['username'],   // attributes here are nested under "Like"
-      }],
+      include: [
+          {
+            model: User,
+            attributes: ['username'],   // attributes here are nested under "Like"
+        },
+        {
+          model: Coordinates,
+        },
+      ]
     });
   }
 
@@ -41,10 +52,15 @@ export class QuestionsService {
   async update(id: number, updateQuestionDto: UpdateQuestionDto): Promise<Question> {
     const question = await this.questionRepository.findOne({
       where: { id },
-      include: [{
-        model: User,
-        attributes: ['username'],   // attributes here are nested under "Like"
-      }],
+      include: [
+        {
+          model: User,
+          attributes: ['username'],   // attributes here are nested under "Like"
+        },
+        {
+          model: Coordinates,
+        },
+      ]
     });
 
     await question.update(updateQuestionDto);

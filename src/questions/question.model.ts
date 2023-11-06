@@ -1,5 +1,6 @@
-import {BelongsTo, Column, DataType, ForeignKey, Model, Table} from 'sequelize-typescript';
+import {BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table} from 'sequelize-typescript';
 import {User} from "../users/users.model";
+import {Coordinates} from "../coordinates/coordinates.model";
 
 @Table({ tableName: 'question' })
 export class Question extends Model<Question> {
@@ -35,4 +36,7 @@ export class Question extends Model<Question> {
   @ForeignKey(() => User)
   @Column({ type: DataType.INTEGER, allowNull: false })
   userId: number;
+
+  @HasMany(() => Coordinates)
+  coordinates: Coordinates[];
 }
