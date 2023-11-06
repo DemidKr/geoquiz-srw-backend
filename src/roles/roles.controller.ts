@@ -1,22 +1,30 @@
 import {
     Body,
     Controller,
-    Delete,
+    Delete, forwardRef,
     Get,
     HttpCode,
-    HttpStatus,
+    HttpStatus, Inject,
     Param,
     Post,
     Req,
-    Res,
+    Res, UseGuards,
 } from '@nestjs/common';
 import {RolesService} from "./roles.service";
 import {CreateRoleDto} from "./dto/create-role.dto";
+import {JWTGuard} from "../auth/guards/jwt.guard";
+import {Roles, RolesGuard} from "../auth/guards/roles.guard";
+import {AuthService} from "../auth/auth.service";
 
 @Controller('role')
 export class RolesController {
-    constructor(private rolesService: RolesService) {}
+    constructor(
+        @Inject(forwardRef(() => RolesService))
+        private rolesService: RolesService,
+    ) {}
 
+    @Roles( 'admin')
+    @UseGuards(JWTGuard, RolesGuard)
     @Get()
     @HttpCode(HttpStatus.OK)
     async getAllRoles(@Req() req, @Res() res) {
