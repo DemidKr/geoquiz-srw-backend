@@ -1,4 +1,5 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import {BelongsTo, Column, DataType, ForeignKey, Model, Table} from 'sequelize-typescript';
+import {User} from "../users/users.model";
 
 @Table({ tableName: 'question' })
 export class Question extends Model<Question> {
@@ -28,6 +29,10 @@ export class Question extends Model<Question> {
   @Column({ type: DataType.BOOLEAN, allowNull: false, defaultValue: false })
   isFinished: boolean;
 
+  @BelongsTo(() => User)
+  user: User;
+
+  @ForeignKey(() => User)
   @Column({ type: DataType.INTEGER, allowNull: false })
   userId: number;
 }
