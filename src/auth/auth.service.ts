@@ -41,7 +41,7 @@ export class AuthService {
         { userId },
         {
           secret: jwtConstants.secret,
-          expiresIn: '30d',
+          expiresIn: '7d',
         },
       ),
     };

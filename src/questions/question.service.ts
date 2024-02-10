@@ -5,6 +5,13 @@ import { CreateQuestionDto } from './dto/create-question.dto';
 import {UpdateQuestionDto} from "./dto/update-question.dto";
 import {User} from "../users/users.model";
 import {Coordinates} from "../coordinates/coordinates.model";
+import {GetAllQuestionsDto} from "./dto/get-all-questions.dto";
+import {Op} from "sequelize";
+
+interface GetAllQuestionsResponse {
+  pageCount: number,
+  questions: Question[]
+}
 
 @Injectable()
 export class QuestionsService {
@@ -12,8 +19,15 @@ export class QuestionsService {
     @InjectModel(Question) private questionRepository: typeof Question,
   ) {}
 
-  async findAll(): Promise<Question[]> {
-    const question =  await this.questionRepository.findAll({include: [
+  async findAll(getAllQuestionDto: GetAllQuestionsDto): Promise<GetAllQuestionsResponse> {
+    const {search = '', perPage = 20, page= 1} = getAllQuestionDto
+    const offset = (page - 1) * perPage
+
+    const questionData =  await this.questionRepository.findAndCountAll({
+      where: {
+        title: { [Op.like]: `%${search}%` },
+      },
+      include: [
         {
           model: User,
           attributes: ['username'],   // attributes here are nested under "Like"
@@ -22,9 +36,18 @@ export class QuestionsService {
           model: Coordinates,
         },
       ],
+      distinct: true, // helps return right count
+      offset,
+      limit: perPage
     });
 
-    return question
+    const { rows: questions, count: totalNumber} = questionData
+    const pageCount = Math.ceil(totalNumber / perPage);
+
+    return {
+      pageCount,
+      questions
+    }
   }
 
   async findOne(id: number): Promise<Question> {
