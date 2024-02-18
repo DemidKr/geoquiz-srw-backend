@@ -7,7 +7,7 @@ import {
   HttpStatus,
   Param,
   Patch,
-  Post, Put,
+  Post, Put, Query,
   Req,
   Res,
   UseGuards,
@@ -18,6 +18,7 @@ import { JWTGuard } from '../auth/guards/jwt.guard';
 import { CreateQuestionDto } from './dto/create-question.dto';
 import {UpdateQuestionDto} from "./dto/update-question.dto";
 import {GetAllQuestionsDto} from "./dto/get-all-questions.dto";
+import {query} from "express";
 
 @Controller('question')
 export class QuestionsController {
@@ -29,11 +30,11 @@ export class QuestionsController {
   @Get()
   @HttpCode(HttpStatus.OK)
   async getAllQuestions(
-      @Body() getAllQuestionDto: GetAllQuestionsDto,
       @Req() req,
-      @Res() res
+      @Res() res,
+      @Query() query: GetAllQuestionsDto
   ) {
-    const {questions, pageCount} = await this.questionsService.findAll(getAllQuestionDto);
+    const {questions, pageCount} = await this.questionsService.findAll(query);
     return res.send({
       questions,
       pageCount
@@ -44,13 +45,14 @@ export class QuestionsController {
   @Get('/user')
   @HttpCode(HttpStatus.OK)
   async getAllUserQuestions(
-      @Body() getAllQuestionDto: GetAllQuestionsDto,
       @Req() req,
-      @Res() res) {
+      @Res() res,
+      @Query() query: GetAllQuestionsDto
+  ) {
     const token = req.token;
 
     const user = await this.authService.getUserByTokenData(token);
-    const {questions, pageCount} = await this.questionsService.findAll(getAllQuestionDto);
+    const {questions, pageCount} = await this.questionsService.findAll(query);
     const filteredQuestions = questions.filter(
       (question) => question.userId === user.id,
     );
