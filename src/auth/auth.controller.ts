@@ -48,7 +48,6 @@ export class AuthController {
   ) {
     const user = await this.usersService.registration(createUserDto);
 
-
     const access = await this.authService.generateAccessToken(user);
     const refresh = await this.authService.generateRefreshToken(
       user.id as number,

@@ -30,7 +30,6 @@ export class QuestionsController {
   @Get()
   @HttpCode(HttpStatus.OK)
   async getAllQuestions(
-      @Req() req,
       @Res() res,
       @Query() query: GetAllQuestionsDto
   ) {
