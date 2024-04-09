@@ -14,6 +14,8 @@ import {Stars} from "./stars/stars.model";
 import {StarsModule} from "./stars/stars.module";
 import {ResultModule} from "./result/result.module";
 import {Result} from "./result/result.model";
+import { join } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
@@ -29,6 +31,9 @@ import {Result} from "./result/result.model";
       database: process.env.POSTGRES_DB,
       models: [User, Question, Role, Coordinates, Stars, Result],
       autoLoadModels: true,
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
     }),
     UsersModule,
     AuthModule,
