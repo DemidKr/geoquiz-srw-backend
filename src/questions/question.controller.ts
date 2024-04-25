@@ -86,7 +86,7 @@ export class QuestionsController {
 
   @UseGuards(JWTGuard)
   @Post()
-  @UseInterceptors(FileInterceptor('imageUrl', storage))
+  @UseInterceptors(FileInterceptor('file', storage))
   @HttpCode(HttpStatus.OK)
   async createQuestion(
     @UploadedFile() file: Express.Multer.File | undefined,
@@ -122,4 +122,8 @@ export class QuestionsController {
   async deleteQuestion(@Param('id') id: number) {
     return await this.questionsService.delete(id);
   }
+}
+
+function ApiConsumes(arg0: string) {
+    throw new Error('Function not implemented.');
 }

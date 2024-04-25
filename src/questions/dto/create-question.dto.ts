@@ -7,6 +7,9 @@ export class CreateQuestionDto {
   @IsNotEmpty()
   readonly description: string;
 
+  @IsNotEmpty()
+  readonly time: number;
+
   readonly imageUrl: string;
 
   @IsNotEmpty()
