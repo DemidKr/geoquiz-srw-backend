@@ -99,7 +99,7 @@ export class QuestionsController {
       ...createQuestionDto,
       imageUrl: file?.filename ?? null,
       userId: user.id,
-    });
+    }).then((result) => result.id);
   }
 
   @UseGuards(JWTGuard)
