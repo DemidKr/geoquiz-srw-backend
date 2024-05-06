@@ -26,11 +26,15 @@ export class CoordinatesService {
         });
     }
 
-    async create(createCoordinatesDto: CreateCoordinatesDto): Promise<Coordinates> {
-        const createdCoordinates = await this.coordinatesRepository.create(
-            createCoordinatesDto
+    async create(createCoordinatesDto: CreateCoordinatesDto){
+        return await this.coordinatesRepository.bulkCreate(
+          createCoordinatesDto.coordinates.map((coord) => {
+              return {
+                  ...coord,
+                  questionId: createCoordinatesDto.questionId
+              }
+          })
         );
-        return createdCoordinates.save();
     }
 
     async update(id: number, updateCoordinatesDto: UpdateCoordinatesDto): Promise<Coordinates> {
