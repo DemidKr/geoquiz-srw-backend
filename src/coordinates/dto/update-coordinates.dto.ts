@@ -6,6 +6,8 @@ export class UpdateCoordinatesDto {
 
     @IsNotEmpty()
     readonly lng: number;
+
+    readonly description: string
 }
 
 

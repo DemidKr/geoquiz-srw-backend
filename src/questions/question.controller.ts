@@ -67,14 +67,11 @@ export class QuestionsController {
     const token = req.token;
 
     const user = await this.authService.getUserByTokenData(token);
-    const {questions, pageCount} = await this.questionsService.findAll(query);
-    const filteredQuestions = questions.filter(
-      (question) => question.userId === user.id,
-    );
+    const {questions, pageCount} = await this.questionsService.findAll(query, user.id);
 
     return res.send({
       pageCount,
-      questions: filteredQuestions
+      questions: questions
     });
   }
 
@@ -110,10 +107,21 @@ export class QuestionsController {
       @Param('id') id: number,
       @Req() req,
   ) {
+    console.log('update');
     return await this.questionsService.update(
         id,
         updateQuestionDto
     );
+  }
+
+  @UseGuards(JWTGuard)
+  @Put('/publish/:id')
+  @HttpCode(HttpStatus.OK)
+  async publishQuestion(
+    @Param('id') id: number,
+    @Req() req,
+  ) {
+    return await this.questionsService.publish(id);
   }
 
   @UseGuards(JWTGuard)
@@ -122,8 +130,4 @@ export class QuestionsController {
   async deleteQuestion(@Param('id') id: number) {
     return await this.questionsService.delete(id);
   }
-}
-
-function ApiConsumes(arg0: string) {
-    throw new Error('Function not implemented.');
 }

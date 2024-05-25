@@ -2,13 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import {Result} from "./result.model";
 import {CreateResultDto} from "./dto/create-result.dto";
-import {UpdateQuestionDto} from "../questions/dto/update-question.dto";
 import {UpdateResultDto} from "./dto/update-result.dto";
+import { QuestionsService } from '../questions/question.service';
 
 @Injectable()
 export class ResultService {
     constructor(
         @InjectModel(Result) private resultRepository: typeof Result,
+        private questionService: QuestionsService,
     ) {}
 
     async findAll(): Promise<Result[]> {
@@ -28,8 +29,24 @@ export class ResultService {
     }
 
     async create(createResultDto: CreateResultDto): Promise<Result> {
+        const question = await this.questionService.findOne(createResultDto.questionId);
+        const questionMaxScore = question.coordinates.length * 1000
+
+        let scoreNumber = createResultDto.score
+
+        if (scoreNumber > questionMaxScore) {
+            scoreNumber = questionMaxScore
+        }
+
+        if (scoreNumber < 0) {
+            scoreNumber = 0
+        }
+
         const createdResult = await this.resultRepository.create(
-            createResultDto,
+          {
+              ...createResultDto,
+              score: scoreNumber,
+          },
         );
         return createdResult.save();
     }

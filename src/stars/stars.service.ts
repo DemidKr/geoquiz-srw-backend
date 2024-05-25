@@ -27,8 +27,18 @@ export class StarsService {
     }
 
     async create(createStarsDto: CreateStarsDto): Promise<Stars> {
+        let starsNumber = createStarsDto.number
+
+        if (starsNumber > 5) {
+            starsNumber = 5
+        }
+
+        if (starsNumber < 1) {
+            starsNumber = 1
+        }
+
         const createdStars = await this.starsRepository.create(
-            createStarsDto,
+          { ...createStarsDto, number: starsNumber},
         );
         return createdStars.save();
     }

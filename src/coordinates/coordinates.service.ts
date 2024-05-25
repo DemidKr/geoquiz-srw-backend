@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import {Coordinates} from "./coordinates.model";
-import {CreateCoordinatesDto} from "./dto/create-coordinates.dto";
+import { CreateCoordinatesDto, CreateOneCoordinatesDto } from './dto/create-coordinates.dto';
 import {UpdateCoordinatesDto} from "./dto/update-coordinates.dto";
 
 @Injectable()
@@ -35,6 +35,13 @@ export class CoordinatesService {
               }
           })
         );
+    }
+
+    async createOne(createCoordinatesDto: CreateOneCoordinatesDto): Promise<Coordinates> {
+        const createdCoordinates = await this.coordinatesRepository.create(
+          createCoordinatesDto
+        );
+        return createdCoordinates.save();
     }
 
     async update(id: number, updateCoordinatesDto: UpdateCoordinatesDto): Promise<Coordinates> {

@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { JWTGuard } from '../auth/guards/jwt.guard';
 import {CoordinatesService} from "./coordinates.service";
-import {CreateCoordinatesDto} from "./dto/create-coordinates.dto";
+import { CreateCoordinatesDto, CreateOneCoordinatesDto } from './dto/create-coordinates.dto';
 import {UpdateCoordinatesDto} from "./dto/update-coordinates.dto";
 
 @Controller('coordinates')
@@ -51,6 +51,16 @@ export class CoordinatesController {
         @Req() req,
     ) {
         return await this.coordinatesService.create(createCoordinatesDto);
+    }
+
+    @UseGuards(JWTGuard)
+    @Post('/one')
+    @HttpCode(HttpStatus.OK)
+    async createOneCoordinates(
+      @Body() createCoordinatesDto: CreateOneCoordinatesDto,
+      @Req() req,
+    ) {
+        return await this.coordinatesService.createOne(createCoordinatesDto);
     }
 
     @UseGuards(JWTGuard)

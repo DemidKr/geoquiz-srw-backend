@@ -19,13 +19,17 @@ export class QuestionsService {
     @InjectModel(Question) private questionRepository: typeof Question,
   ) {}
 
-  async findAll(getAllQuestionDto: GetAllQuestionsDto): Promise<GetAllQuestionsResponse> {
+  async findAll(getAllQuestionDto: GetAllQuestionsDto, userId?: number): Promise<GetAllQuestionsResponse> {
     const {search = '', perPage = 20, page= 1} = getAllQuestionDto
     const offset = (page - 1) * perPage
 
     const questionData =  await this.questionRepository.findAndCountAll({
-      where: {
+      where: userId ? {
         title: { [Op.like]: `%${search}%` },
+        userId: userId
+      } : {
+        title: { [Op.like]: `%${search}%` },
+        isFinished: true
       },
       include: [
         {
@@ -75,22 +79,22 @@ export class QuestionsService {
   async update(id: number, updateQuestionDto: UpdateQuestionDto): Promise<Question> {
     const question = await this.questionRepository.findOne({
       where: { id },
-      include: [
-        {
-          model: User,
-          attributes: ['username'],   // attributes here are nested under "Like"
-        },
-        {
-          model: Coordinates,
-        },
-      ]
     });
 
     await question.update(updateQuestionDto);
+    return await question.save();
+  }
+
+  async publish(id: number): Promise<Question> {
+    const question = await this.questionRepository.findOne({
+      where: { id },
+    });
+
+    await question.update({isFinished: true});
     return question.save();
   }
 
-  async delete(id: number): Promise<void> {
-    await this.questionRepository.destroy({ where: { id } });
+  async delete(id: number): Promise<number> {
+    return await this.questionRepository.destroy({ where: { id } });
   }
 }

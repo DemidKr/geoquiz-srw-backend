@@ -18,6 +18,9 @@ export class Coordinates extends Model<Coordinates> {
     @Column({ type: DataType.DOUBLE, allowNull: false })
     lng: number;
 
+    @Column({ type: DataType.STRING, allowNull: true})
+    description: string;
+
     @BelongsTo(() => Question)
     question: Question;
 

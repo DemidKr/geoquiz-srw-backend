@@ -8,8 +8,6 @@ export class UpdateQuestionDto {
     readonly timesFinished: number;
 
     readonly imageUrl: string;
-
-    readonly isFinished: boolean;
 }
 
 
