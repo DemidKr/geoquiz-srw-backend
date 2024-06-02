@@ -28,6 +28,15 @@ export class ResultService {
         });
     }
 
+    async findQuestionResult(questionId: number): Promise<Result> {
+        return await this.resultRepository.findOne({
+            where: { questionId },
+            order: [
+                ['score', 'ASC'],
+            ],
+        });
+    }
+
     async create(createResultDto: CreateResultDto): Promise<Result> {
         const question = await this.questionService.findOne(createResultDto.questionId);
         const questionMaxScore = question.coordinates.length * 1000

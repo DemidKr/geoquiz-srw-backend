@@ -1,6 +1,8 @@
 import {BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table} from 'sequelize-typescript';
 import {User} from "../users/users.model";
 import {Coordinates} from "../coordinates/coordinates.model";
+import { Stars } from '../stars/stars.model';
+import { Result } from '../result/result.model';
 
 @Table({ tableName: 'question' })
 export class Question extends Model<Question> {
@@ -30,13 +32,19 @@ export class Question extends Model<Question> {
   @Column({ type: DataType.BOOLEAN, allowNull: false, defaultValue: false })
   isFinished: boolean;
 
-  @BelongsTo(() => User)
+  @BelongsTo(() => User,{as: 'users'})
   user: User;
 
   @ForeignKey(() => User)
   @Column({ type: DataType.INTEGER, allowNull: false })
   userId: number;
 
-  @HasMany(() => Coordinates)
+  @HasMany(() => Coordinates, {as: 'coordinates', foreignKey: 'questionId'})
   coordinates: Coordinates[];
+
+  @HasMany(() => Stars, {as: 'stars', foreignKey: 'questionId'})
+  stars: Stars[];
+
+  @HasMany(() => Result, {as: 'result', foreignKey: 'questionId'})
+  result: Result[];
 }

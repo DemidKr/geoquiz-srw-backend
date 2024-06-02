@@ -31,7 +31,10 @@ export class AuthService {
 
   async generateAccessToken(user: User) {
     return {
-      access_token: this.jwtService.sign({ user }),
+      access_token: this.jwtService.sign({ user },{
+        secret: jwtConstants.secret,
+        expiresIn: '7d',
+      },),
     };
   }
 

@@ -6,7 +6,9 @@ import {UpdateQuestionDto} from "./dto/update-question.dto";
 import {User} from "../users/users.model";
 import {Coordinates} from "../coordinates/coordinates.model";
 import {GetAllQuestionsDto} from "./dto/get-all-questions.dto";
-import {Op} from "sequelize";
+import { Op } from 'sequelize';
+import { Stars } from '../stars/stars.model';
+import { Result } from '../result/result.model';
 
 interface GetAllQuestionsResponse {
   pageCount: number,
@@ -34,15 +36,25 @@ export class QuestionsService {
       include: [
         {
           model: User,
+          as: 'users',
           attributes: ['username'],   // attributes here are nested under "Like"
         },
         {
+          model: Stars,
+          as: "stars",
+        },
+        {
           model: Coordinates,
+          as: "coordinates",
+        },
+        {
+          model: Result,
+          as: "result",
         },
       ],
       distinct: true, // helps return right count
       offset,
-      limit: perPage
+      limit: perPage,
     });
 
     const { rows: questions, count: totalNumber} = questionData

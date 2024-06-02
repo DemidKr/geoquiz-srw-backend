@@ -43,9 +43,17 @@ export class ResultController {
         return res.send(userResults);
     }
 
+    @Get('/question/:id')
+    @HttpCode(HttpStatus.OK)
+    async getAllQuestionsResults(@Param('id') id: number, @Res() res) {
+        const questionResults = await this.resultService.findQuestionResult(id);
+
+        return res.send(questionResults);
+    }
+
     @Get(':id')
     @HttpCode(HttpStatus.OK)
-    async getQuestion(@Param('id') id: number) {
+    async getResult(@Param('id') id: number) {
         return await this.resultService.findOne(id);
     }
 

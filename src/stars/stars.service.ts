@@ -26,6 +26,12 @@ export class StarsService {
         });
     }
 
+    async findUserOneInQuestion({ userId, questionId }:{ userId: number, questionId: number }): Promise<Stars> {
+        return await this.starsRepository.findOne({
+            where: { userId, questionId },
+        });
+    }
+
     async create(createStarsDto: CreateStarsDto): Promise<Stars> {
         let starsNumber = createStarsDto.number
 

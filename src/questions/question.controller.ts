@@ -107,7 +107,6 @@ export class QuestionsController {
       @Param('id') id: number,
       @Req() req,
   ) {
-    console.log('update');
     return await this.questionsService.update(
         id,
         updateQuestionDto

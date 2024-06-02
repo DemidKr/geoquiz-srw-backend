@@ -10,5 +10,3 @@ export class CreateResultDto {
     @IsNotEmpty()
     readonly userId: number;
 }
-
-
