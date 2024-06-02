@@ -1,6 +1,7 @@
 import {BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table} from 'sequelize-typescript';
 import {Question} from "../questions/question.model";
 import {Role} from "../roles/roles.model";
+import { Result } from '../result/result.model';
 
 @Table({ tableName: 'users' })
 export class User extends Model<User> {
@@ -27,4 +28,7 @@ export class User extends Model<User> {
 
   @HasMany(() => Question)
   questions: Question[];
+
+  @HasMany(() => Result, {as: 'result', foreignKey: 'userId'})
+  result: Result[];
 }

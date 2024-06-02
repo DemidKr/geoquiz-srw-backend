@@ -4,6 +4,7 @@ import {Result} from "./result.model";
 import {CreateResultDto} from "./dto/create-result.dto";
 import {UpdateResultDto} from "./dto/update-result.dto";
 import { QuestionsService } from '../questions/question.service';
+import { User } from '../users/users.model';
 
 @Injectable()
 export class ResultService {
@@ -28,9 +29,16 @@ export class ResultService {
         });
     }
 
-    async findQuestionResult(questionId: number): Promise<Result> {
-        return await this.resultRepository.findOne({
+    async findQuestionResult(questionId: number): Promise<Result[]> {
+        return await this.resultRepository.findAll({
             where: { questionId },
+            include: [
+                {
+                    model: User,
+                    as: 'users',
+                    attributes: ['username'],
+                },
+            ],
             order: [
                 ['score', 'ASC'],
             ],
